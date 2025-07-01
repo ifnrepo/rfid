@@ -3,8 +3,11 @@
         <div class="row">
             <div class="col-sm-6">
                 <h3 class="mb-1">INPUT BARANG DI FINISHING (GATE OUT)</h3>
+                <h5 class="m-0">
+                    <div id="jam" style="text-align: left;" class="font-bold text-secondary">-- : -- : --</div>
+                </h5>
             </div>
-            <div class="col-sm-6 float-right pt-1 hilang" style="text-align: right;">
+            <div class="col-sm-6 float-right pt-1" style="text-align: right;">
                 <button type="button" id="button-clear" class="btn btn-sm btn-outline-dark flat " style="float: right;">Clear</button>
                 <button type="button" id="button-connect" class="btn btn-outline-primary btn-sm flat" style="float: right; margin-right: 3px;">Connection</button>
                 <select class="form-control form-select btn-sm flat font-kecil" id="alat" name="alat" style="width: 60% !important; float: right; height: 31px; margin-right: 5px;">
@@ -17,9 +20,17 @@
         <hr class="m-0">
         <div class="row font-kecil mt-1">
             <div class="col-sm-6" >
-                <div>
+                <!-- <div>
                     <label for="inputEmail3" class="col-sm-2 col-form-label pt-1 font-bold" style="height: 28px; float: left:">INPUT LIST</label>
+                    <label for="inputEmail3" class="col-sm-2 col-form-label pt-1 font-bold" style="height: 28px; float: left:">STATUS</label>
                     <label id="posex" class="col-sm-10 col-form-label pt-1 text-end text-danger" style="height: 26px; float: right"></label>
+                </div> -->
+
+                <div class="row mb-1 align-items-center">
+                    <div class="col-7 text-start font-bold">INPUT LIST</div>
+                    <div class="col-2 text-center font-bold">STATUS</div>
+                    <div class="col-3 text-end font-bold" id = "posex">Done..</div>
+                    
                 </div>
                 <hr class="m-0">
                 <div id="tampungan">
@@ -47,15 +58,12 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="form-group row hilang" id="inputanrf">
+                <div class="form-group row" id="inputanrf">
                     <label for="inputEmail3" class="col-sm-2 col-form-label pt-1 font-bold" style="height: 26px;">RFID</label>
                     <div class="col-sm-10">
                     <input type="text" class="form-control input-sm flat p-0" id="inputrfid" oninput="simulateRFIDReading()">
                     </div>
                 </div>
-                <h5 class="m-0">
-                    <div id="jam" style="text-align: right;" class="font-bold text-secondary">-- : -- : --</div>
-                </h5>
                 <hr class="mt-1">
                 <!-- <h5 class="text-primary">7 Record</h5> -->
                  <label class="mb-3 font-bold">Settings :</label>

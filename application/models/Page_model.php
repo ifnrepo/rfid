@@ -35,10 +35,11 @@ class Page_model extends CI_Model   {
         if($id > 0){
             $xhas = $this->db->get_where('tb_rfid',['id'=>$id])->row_array();
             $dis = $xhas['dis']==0 ? '' : ' dis '.$xhas['dis'];
-            $adarf = $sudahada==1 ? ' SUDAH ADA PADA DATA OUT ' : '';
+            $adarf = $sudahada==1 ? ' SUDAH ADA PADA DATA OUT ' : 'BERHASIL INPUT';
             $nobale = ' Bale No. '.$xhas['nobale'];
-            $hasil['isi'] =  $xhas['po'].'#'.trim($xhas['item']).$dis.$nobale.' ('.$xhas['gate_out'].')'.$adarf;
-            $hasil['status'] = $sudahada==1 ? 'NG' : 'OK';
+            $hasil['isi'] =  $xhas['po'].'#'.trim($xhas['item']).$dis.$nobale.' ('.$xhas['gate_out'].')';
+            $hasil['done'] = $adarf;
+            $hasil['status'] = $sudahada==1 ? 'SA' : 'OK';
         }else{
             $hasil = [];
         }
@@ -72,8 +73,9 @@ class Page_model extends CI_Model   {
             $dis = $xhas['dis']==0 ? '' : ' dis '.$xhas['dis'];
             $adarf = $sudahada==1 ? ' SUDAH DI INPUT ' : '';
             $nobale = ' Bale No. '.$xhas['nobale'];
-            $hasil['isi'] =  $xhas['po'].'#'.trim($xhas['item']).$dis.$nobale.' ('.$xhas['gate_in'].')'.$adarf;
-            $hasil['status'] = $sudahada==1 ? 'NG' : 'OK';
+            $hasil['isi'] =  $xhas['po'].'#'.trim($xhas['item']).$dis.$nobale.' ('.$xhas['gate_in'].')';
+            $hasil['done'] = $adarf;
+            $hasil['status'] = $sudahada==1 ? 'SA' : 'OK';
         }else{
             $hasil = [];
         }

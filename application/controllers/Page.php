@@ -43,9 +43,12 @@ class Page extends CI_Controller {
 			if(count($hasil)> 0 ){
 				$data[$x]['value'] = $hasil['isi'];
 				$data[$x]['status'] = $hasil['status'];
+				$data[$x]['done'] = $hasil['done'];
+
 			}else{
 				$data[$x]['value'] = $value['value'].' - (NOT FOUND)';
 				$data[$x]['status'] = 'NG';
+				$data[$x]['done'] = 'NOT FOUND';
 			}
 			$x++;
 		}
@@ -59,9 +62,11 @@ class Page extends CI_Controller {
 			if(count($hasil) > 0 ){
 				$data[$x]['value'] = $hasil['isi'];
 				$data[$x]['status'] = $hasil['status'];
+				$data[$x]['done'] = $hasil['done'];
 			}else{
 				$data[$x]['value'] = $value['value'].' - (NOT FOUND)';
 				$data[$x]['status'] = 'NG';
+				$data[$x]['done'] = 'NOT FOUND';
 			}
 			$x++;
 		}
