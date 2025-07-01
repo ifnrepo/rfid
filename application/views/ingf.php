@@ -20,9 +20,10 @@
         <hr class="m-0">
         <div class="row font-kecil mt-1">
             <div class="col-sm-6" >
-                <div>
-                    <label for="inputEmail3" class="col-sm-2 col-form-label pt-1 font-bold" style="height: 28px; float: left:">INPUT LIST</label>
-                    <label id="posex" class="col-sm-10 col-form-label pt-1 text-end text-danger" style="height: 26px; float: right"></label>
+                <div class="row mb-1 align-items-center">
+                    <label  class="col-7 font-bold text-start" style="height: 28px; float: left:">INPUT LIST</label>
+                    <div class="col-2 text-center font-bold">STATUS</div>
+                    <div class="col-3 text-end font-bold" id = "posex">Done..</div>
                 </div>
                 <hr class="m-0">
                 <div id="tampungan">

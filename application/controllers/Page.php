@@ -58,7 +58,7 @@ class Page extends CI_Controller {
 		$data = $_POST['data'];
 		$x=0;
 		foreach($data as $dat=>$value){
-			$hasil = $this->pagemodel->cekdatain($value['value']);
+			$hasil = $this->pagemodel->cekDataIn($value['value']);
 			if(count($hasil) > 0 ){
 				$data[$x]['value'] = $hasil['isi'];
 				$data[$x]['status'] = $hasil['status'];
@@ -66,7 +66,7 @@ class Page extends CI_Controller {
 			}else{
 				$data[$x]['value'] = $value['value'].' - (NOT FOUND)';
 				$data[$x]['status'] = 'NG';
-				$data[$x]['done'] = 'NOT FOUND';
+				$data[$x]['done'] = 'TIDAK DI GUDANG';
 			}
 			$x++;
 		}

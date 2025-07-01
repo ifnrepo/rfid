@@ -46,7 +46,7 @@ class Page_model extends CI_Model   {
         return $hasil;
     }
 
-    public function cekdatain($val){
+    public function cekDataIn($val){
         $hasil = [];
         $id = 0;
         $sudahada = 0;
@@ -54,7 +54,7 @@ class Page_model extends CI_Model   {
         $cek = $this->db->get('tb_rfid');
         if($cek->num_rows() > 0){
             $datacek = $cek->row_array();
-            if($datacek['sesi_gf']!=null){
+            if($datacek['sesi_gf']!=null & $datacek['gate_in']!=null){
                 $sudahada = 1;
                 $id = $datacek['id'];
             }else{
@@ -71,7 +71,7 @@ class Page_model extends CI_Model   {
         if($id > 0){
             $xhas = $this->db->get_where('tb_rfid',['id'=>$id])->row_array();
             $dis = $xhas['dis']==0 ? '' : ' dis '.$xhas['dis'];
-            $adarf = $sudahada==1 ? ' SUDAH DI INPUT ' : '';
+            $adarf = $sudahada==1 ? ' SUDAH DI INPUT ' : 'BERHASIL MASUK';
             $nobale = ' Bale No. '.$xhas['nobale'];
             $hasil['isi'] =  $xhas['po'].'#'.trim($xhas['item']).$dis.$nobale.' ('.$xhas['gate_in'].')';
             $hasil['done'] = $adarf;

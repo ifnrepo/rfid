@@ -242,11 +242,7 @@ function handleResponse(data) {
 			};
 			arrayHandheld.push(arr);
 
-			const el = document.createElement("div");
-			el.className = "tag-item";
-			el.id = tagCount;
-			el.innerHTML = `<span>${tagCount}.</span> ${epcStr}`;
-			tagList.prepend(el);
+			addTagRow(tagCount, epcStr)
 
 			console.log("Tag baru ditemukan: " + epcStr);
 			clearInterval(timerFixreader);
@@ -254,9 +250,13 @@ function handleResponse(data) {
 		}
 	}
 }
+
+/**
+ * class buat validasi status
+ */
 function validateFixreader() {
 	if (epcSet.size > 0 && databarufix == 1) {
-		document.getElementById("posex").innerHTML = "Cek Data RFID ..";
+		document.getElementById("posex").innerHTML = "Done..";
 		console.log("Pengecekan Data");
 		docek = 0;
 		databarufix = 0;
@@ -267,32 +267,32 @@ function validateFixreader() {
 			data: {
 				data: arrayHandheld,
 			},
-			success: function (data) {
-				// alert(data);
-				document.getElementById("posex").innerHTML = "Done ..";
-				data.forEach((data) => {
-					let hasil = data.value;
-					let key = data.key;
-					let stat = data.status;
-					console.log(hasil);
-					var isi = document.getElementById(key);
-					isi.innerHTML = key + ". " + hasil;
-					var sp = document.createElement("span");
-					sp.style.float = "right";
-					sp.style.color = "white";
-					if (stat == "OK") {
-						sp.className = "bg-success px-2";
-						var no = document.createTextNode("OK");
-					} else {
-						sp.className = "bg-danger px-2";
-						var no = document.createTextNode("NG");
-					}
-					var itm = document.getElementById(key);
-					sp.appendChild(no);
-					itm.appendChild(sp);
-					// x.appendChild(textnode);
-				});
-				// window.location.reload();
+			success: function(results) {
+			results.forEach(item => {
+				const { key, value: hasil, status: stat, done } = item;
+				const row = document.getElementById(`${key}`);
+				if (!row) return;
+
+				row.children[0].textContent = `${key}. ${hasil}`;
+
+				const colDone  = document.getElementById(`done-${key}`);
+				colDone.textContent = done.trim();
+
+				const colBadge = document.getElementById(`badge-${key}`);
+				colBadge.innerHTML = "";
+				const sp = document.createElement("span");
+				let color;
+				if (item.status === "OK") {
+					color = "success";
+				} else if (item.status === "SA") {
+					color = "warning";
+				} else {
+					color = "danger";
+				}	
+				sp.className = `px-2 badge bg-${color}`;
+				sp.textContent = stat;
+				colBadge.appendChild(sp);
+			});
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status);
@@ -301,6 +301,33 @@ function validateFixreader() {
 		});
 	}
 }
+
+function addTagRow(key, text) {
+	const row = document.createElement("div");
+	row.className = "row align-items-center mb-1";
+	row.id = `${key}`;
+
+	// 1) INPUT LIST
+	const col1 = document.createElement("div");
+	col1.className = "col-7 text-start";
+	col1.textContent = `${key}. ${text}`;
+	row.appendChild(col1);
+
+	// 2) STATUS MESSAGE (initially empty)
+	const col2 = document.createElement("div");
+	col2.className = "col-2 text-center";
+	col2.id = `done-${key}`; // unique per-row ID
+	row.appendChild(col2);
+
+	// 3) OK/NG badge (initially empty)
+	const col3 = document.createElement("div");
+	col3.className = "col-3 d-flex justify-content-end align-items-end";
+	col3.id = `badge-${key}`; // unique per-row ID
+	row.appendChild(col3);
+
+	tagList.append(row);
+}
+
 let urut = 0; // Inisialisasi variabel urut
 function simulateRFIDReading() {
 	const rfidData = document.getElementById("inputrfid").value;
@@ -323,13 +350,8 @@ function simulateRFIDReading() {
 			arrayHandheld.push(arr);
 			const text = urut.toLocaleString("id-ID"); // Format lokal Indonesia
 			// textarea.value += text + ". " + rfidData + "\n"; // Menambahkan data RFID ke textarea
-			const el = document.createElement("div");
-			el.className = "tag-item";
-			el.id = `${urut}`;
-			el.style.marginTop = "1px";
-			// el.innerHTML = `${urut}.${rfidData}<span class="bg-success px-2" style="float: right; color: white;">OK</span>`;
-			el.innerHTML = `${urut}.${rfidData}`;
-			tagList.append(el);
+
+			addTagRow(urut, rfidData);
 			document.getElementById("posex").innerHTML = "Done ..";
 			clearInterval(timerFixreader);
 			timerFixreader = setInterval(validateFixreader, 2000);

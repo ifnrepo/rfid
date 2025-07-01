@@ -373,34 +373,7 @@ function validateHandheld() {
 			data: {
 				data: arrayHandheld,
 			},
-			success: function (results) {
-				// alert(data);
-				// data.forEach((data) => {
-				// 	let hasil = data.value;
-				// 	let key = data.key;
-				// 	let stat = data.status;
-				// 	let done = data.done;
-				// 	console.log(hasil);
-				// 	var isi = document.getElementById(key);
-				// 	isi.innerHTML = key + ". " + hasil;
-				// 	var statusData = document.getElementById("status")
-				// 	statusData.innerHTML = data.done.trim();
-				// 	var sp = document.createElement("span");
-				// 	sp.style.float = "right";
-				// 	sp.style.color = "white";
-				// 	if (stat == "OK") {
-				// 		sp.className = "bg-success px-2";
-				// 		var no = document.createTextNode("OK");
-				// 	} else {
-				// 		sp.className = "bg-danger px-2";
-				// 		var no = document.createTextNode("NG");
-				// 	}
-				// 	var itm = document.getElementById(key);
-				// 	sp.appendChild(no);
-				// 	itm.appendChild(sp);
-				// 	// x.appendChild(textnode);
-				// });
-
+			success: function (results) {;
 				results.forEach((item) => {
 					const row = document.getElementById(item.key);
 					if (!row) return;
@@ -420,7 +393,7 @@ function validateHandheld() {
 						color = "warning";
 					} else {
 						color = "danger";
-		}
+					}	
 					colStatus.innerHTML = ""; // clear any old badge
 					const badge = document.createElement("span");
 					badge.className = `badge bg-${color} px-2 text-end`;
