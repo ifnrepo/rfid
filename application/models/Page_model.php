@@ -89,7 +89,11 @@ class Page_model extends CI_Model
         return $this->db
             ->distinct()
             ->select('plno')
-            ->get('tb_balenumber')
+            ->from('tb_balenumber')
+            ->where('selesai', 0)       // only rows that are still pending
+            ->group_by('plno')          // one row per PL-No
+            ->order_by('plno', 'ASC')
+            ->get()
             ->result_array();
     }
 
@@ -103,13 +107,13 @@ class Page_model extends CI_Model
             ->select('id, po, item, dis, nobale, masuk')
             ->from('tb_balenumber')
             ->where('plno', $plno)
-            ->where('selesai', 0)
+            // ->where('selesai', 0)
             ->order_by('id', 'ASC')
             ->get()
             ->result_array();
     }
 
-        public function getOrderByPlNoDone(string $plno): array
+    public function getOrderByPlNoDone(string $plno): array
     {
 
         if ($plno == '') {

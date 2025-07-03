@@ -132,6 +132,8 @@ $progressPercent = $progressPercent ?? 0;
                 </div>
             </div>
             <div class=" w-50 mt-2">
+                <?=$doneOrdersCount ?>/<?=$totalOrdersCount ?>
+
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" style="width: <?= $progressPercent ?>%;"
                         aria-valuenow="<?= $progressPercent ?>" aria-valuemin="0" aria-valuemax="100">
