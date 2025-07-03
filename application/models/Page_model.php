@@ -89,10 +89,34 @@ class Page_model extends CI_Model
         return $this->db
             ->distinct()
             ->select('plno')
-            ->get('tb_balenumber')
+            ->from('tb_balenumber')
+            ->where('visible', 1)
+            ->group_by('plno')          // one row per PL-No
+            ->order_by('plno', 'ASC')
+            ->get()
             ->result_array();
     }
 
+
+    public function setPlVisible(string $plno, bool $visible = false): void
+    {
+        if ($this->countPending($plno) === 0) {
+            // safe to hide
+            $this->db
+                ->where('plno', $plno)
+                ->update('tb_balenumber', ['visible' => 0]);
+        }
+
+    }
+
+
+    public function countPending(string $plno): int
+    {
+        return (int) $this->db
+            ->where('plno', $plno)
+            ->where('selesai', 0)
+            ->count_all_results('tb_balenumber');
+    }
     public function getOrderByPlNo(string $plno): array
     {
 
@@ -103,13 +127,13 @@ class Page_model extends CI_Model
             ->select('id, po, item, dis, nobale, masuk')
             ->from('tb_balenumber')
             ->where('plno', $plno)
-            ->where('selesai', 0)
+            // ->where('selesai', 0)
             ->order_by('id', 'ASC')
             ->get()
             ->result_array();
     }
 
-        public function getOrderByPlNoDone(string $plno): array
+    public function getOrderByPlNoDone(string $plno): array
     {
 
         if ($plno == '') {
