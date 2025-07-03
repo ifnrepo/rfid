@@ -20,6 +20,8 @@ const powerSelect = document.getElementById("powerSelect");
 const setPowerBtn = document.getElementById("button-setpower3");
 const setAntennaBtn = document.getElementById("button-ant2");
 
+var timerHandheld = setInterval(validateHandheld, 2000);
+
 // for (let i = 1; i <= 30; i++) {
 // 	const opt = document.createElement("option");
 // 	opt.value = i;
@@ -242,11 +244,7 @@ function handleResponse(data) {
 			};
 			arrayHandheld.push(arr);
 
-			const el = document.createElement("div");
-			el.className = "tag-item";
-			el.id = tagCount;
-			el.innerHTML = `<span>${tagCount}.</span> ${epcStr}`;
-			tagList.prepend(el);
+			addTagRow(tagCount, epcStr);
 
 			console.log("Tag baru ditemukan: " + epcStr);
 			clearInterval(timerFixreader);
@@ -254,6 +252,33 @@ function handleResponse(data) {
 		}
 	}
 }
+
+function addTagRow(key, text) {
+	const row = document.createElement("div");
+	row.className = "row align-items-center mb-1";
+	row.id = `${key}`;
+
+	// 1) INPUT LIST
+	const col1 = document.createElement("div");
+	col1.className = "col-7 text-start";
+	col1.textContent = `${key}. ${text}`;
+	row.appendChild(col1);
+
+	// 2) STATUS MESSAGE (initially empty)
+	const col2 = document.createElement("div");
+	col2.className = "col-2 text-center";
+	col2.id = `done-${key}`; // unique per-row ID
+	row.appendChild(col2);
+
+	// 3) OK/NG badge (initially empty)
+	const col3 = document.createElement("div");
+	col3.className = "col-3 d-flex justify-content-end align-items-end";
+	col3.id = `badge-${key}`; // unique per-row ID
+	row.appendChild(col3);
+
+	tagList.append(row);
+}
+
 function validateFixreader() {
 	if (epcSet.size > 0 && databarufix == 1) {
 		document.getElementById("posex").innerHTML = "Done ..";
@@ -277,11 +302,14 @@ function validateFixreader() {
 					var isi = document.getElementById(key);
 					isi.innerHTML = key + ". " + hasil;
 					var sp = document.createElement("span");
-					sp.style.float = "right";
+					sp.style.float = "end";
 					sp.style.color = "white";
 					if (stat == "OK") {
 						sp.className = "bg-success px-2";
 						var no = document.createTextNode("OK");
+					} else if (stat == "SA") {
+						sp.className = "bg-warning px-2";
+						var no = document.createTextNode("SA")
 					} else {
 						sp.className = "bg-danger px-2";
 						var no = document.createTextNode("NG");
@@ -292,6 +320,86 @@ function validateFixreader() {
 					// x.appendChild(textnode);
 				});
 				// window.location.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	}
+}
+
+let urut = 0;
+function simulateRFIDReading() {
+	const rfidData = document.getElementById("inputrfid").value;
+	document.getElementById("inputrfid").value = "";
+
+	if (arrayData.includes(rfidData)) {
+	} else {
+		arrayData.push(rfidData); // Menambahkan data ke array
+		if (rfidData != "") {
+			document.getElementById("posex").innerHTML = "Retrieve Data Tags ..";
+			urut = urut + 1;
+			databaru = 1;
+			loopint = 2000;
+			arr = {
+				key: urut,
+				value: rfidData,
+			};
+			arrayHandheld.push(arr);
+			const text = urut.toLocaleString("id-ID"); // Format lokal Indonesia
+			// textarea.value += text + ". " + rfidData + "\n"; // Menambahkan data RFID ke textarea
+			addTagRow(urut, rfidData);
+			document.getElementById("posex").innerHTML = "Done ..";
+			clearInterval(timerHandheld);
+			timerHandheld = setInterval(validateHandheld, 2000);
+		}
+	}
+}
+
+function validateHandheld() {
+	if (arrayHandheld.length > 0 && databaru == 1) {
+		document.getElementById("posex").innerHTML = "Done ..";
+		console.log("Pengecekan Data");
+		databaru = 0;
+		docek = 0;
+
+
+
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "page/validateHandheld",
+			data: {
+				data: arrayHandheld,
+			},
+			success: function (results) {;
+				results.forEach((item) => {
+					const row = document.getElementById(item.key);
+					if (!row) return;
+
+					const colText = row.children[0];
+					colText.textContent = `${item.key}. ${item.value}`;
+
+					const colDone = row.children[1];
+					colDone.textContent = item.done.trim();
+
+					const colStatus = row.children[2];
+
+					let color;
+					if (item.status === "OK") {
+						color = "success";
+					} else if (item.status === "SA") {
+						color = "warning";
+					} else {
+						color = "danger";
+					}	
+					colStatus.innerHTML = ""; // clear any old badge
+					const badge = document.createElement("span");
+					badge.className = `badge bg-${color} px-2 text-end`;
+					badge.textContent = item.status; // "OK" "SA" or "NG"
+					colStatus.appendChild(badge);
+				});
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status);

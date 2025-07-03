@@ -13,7 +13,7 @@
             <script src="<?= base_url(); ?>assets/js/fixed-readerantgf.js?<?= $unik ?>"></script>
         <?php endif; ?>
         <?php if(isset($halaman) && $halaman=='bx'): ?>
-            <script src="<?= base_url(); ?>assets/js/fixed-reader.js"></script>
+<script src="<?= base_url(); ?>assets/js/fixed-readerCon.js?<?= $unik ?>"></script>
         <?php endif; ?>
     </body>
 </html>
