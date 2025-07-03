@@ -2,6 +2,9 @@
 <?php
 // make sure $show_done always exists
 $show_done = isset($show_done) && $show_done;
+$doneOrdersCount = $doneOrdersCount ?? 0;
+$totalOrdersCount = $totalOrdersCount ?? 0;
+$progressPercent = $progressPercent ?? 0;
 ?>
 
 <section class="resume-section p-3" style="align-items : normal !important" id="about">
@@ -128,10 +131,11 @@ $show_done = isset($show_done) && $show_done;
                     <div class="py-3"><!-- empty, adds vertical gap --></div>
                 </div>
             </div>
-            <div class="progress w-50 mt-2">
-                <div id="scanProgress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
-                    aria-valuemin="0" aria-valuemax="100">
-                    10%
+            <div class=" w-50 mt-2">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: <?= $progressPercent ?>%;"
+                        aria-valuenow="<?= $progressPercent ?>" aria-valuemin="0" aria-valuemax="100">
+                        <?= $progressPercent ?>%</div>
                 </div>
             </div>
         </div>

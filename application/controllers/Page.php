@@ -51,8 +51,21 @@ class Page extends CI_Controller
 			$data['orders'] = $this->pagemodel->getOrderByPlNo($plno);
 		}
 
+		//progress bar 
+		$allOrders = $this->pagemodel->getOrderByPlNo($plno);
+		$doneOrders = $this->pagemodel->getOrderByPlNoDone($plno);
+		$totalCount = count($allOrders);
+		$doneCount = count($doneOrders);
+		$progressPerc = $totalCount ? round($doneCount / $totalCount * 100) : 0;
+
+
+
 		// **Pass it to the view**
 		$data['show_done'] = $showDone;
+		$data['totalOrdersCount'] = $totalCount;
+		$data['doneOrdersCount'] = $doneCount;
+		$data['progressPercent'] = $progressPerc;
+
 
 		$this->load->view('layouts/header');
 		$this->load->view('outbox.php', $data);
