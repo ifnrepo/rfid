@@ -124,10 +124,10 @@ $progressPercent = $progressPercent ?? 0;
                     <div class="py-3"><!-- empty, adds vertical gap --></div>
                 </div>
             </div>
-            <div class=" w-50 mt-2 justify-content-center">
+            <div class=" w-50 mt-2 mx-auto text-center">
                 <?= $doneOrdersCount ?>/<?= $totalOrdersCount ?>
 
-                <div class="progress">
+                <div class="progress mb-2 mt-2">
                     <div class="progress-bar" role="progressbar" style="width: <?= $progressPercent ?>%;"
                         aria-valuenow="<?= $progressPercent ?>" aria-valuemin="0" aria-valuemax="100">
                         <?= $progressPercent ?>%
